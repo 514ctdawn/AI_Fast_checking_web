@@ -2,12 +2,16 @@
 const isGithubActions = process.env.GITHUB_ACTIONS === "true";
 const repository = process.env.GITHUB_REPOSITORY || "";
 const repoName = repository.includes("/") ? repository.split("/")[1] : "";
-const basePath = isGithubActions && repoName ? `/${repoName}` : "";
+const configuredBasePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+const basePath =
+  configuredBasePath || (isGithubActions && repoName ? `/${repoName}` : "");
+const distDir = process.env.NEXT_DIST_DIR || ".next";
 
 const nextConfig = {
   reactStrictMode: true,
   output: "export",
   trailingSlash: true,
+  distDir,
   images: {
     unoptimized: true
   },

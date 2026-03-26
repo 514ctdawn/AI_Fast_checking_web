@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:gh": "cross-env NEXT_PUBLIC_BASE_PATH=/AI_Fast_checking_web NEXT_DIST_DIR=.next-gh next build",
+    "deploy": "npm run build:gh && gh-pages -d out -b gh-pages",
     "start": "next start",
     "lint": "next lint"
   },
@@ -22,8 +24,10 @@
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.2.5",
+    "gh-pages": "^6.3.0",
     "postcss": "^8.4.41",
     "tailwindcss": "^3.4.10",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "cross-env": "^10.0.0"
   }
 }
