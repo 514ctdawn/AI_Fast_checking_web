@@ -1,4 +1,4 @@
-name: Build and publish to gh-pages
+name: Deploy Next.js site to Pages
 
 on:
   push:
@@ -6,10 +6,16 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
-  deploy-gh-pages:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -26,35 +32,19 @@ jobs:
 
       - name: Build static export
         run: npm run build
-        env:
-          NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
-          NEXT_DIST_DIR: .next-gh
 
-      - name: Resolve publish directory
-        run: |
-          if [ -f "out/index.html" ]; then
-            echo "PUBLISH_DIR=out" >> $GITHUB_ENV
-            exit 0
-          fi
-
-          INDEX_FILE=$(find out -type f -name "index.html" | head -n 1 || true)
-          if [ -n "$INDEX_FILE" ]; then
-            PUBLISH_DIR=$(dirname "$INDEX_FILE")
-            echo "Detected nested export root: $PUBLISH_DIR"
-            echo "PUBLISH_DIR=$PUBLISH_DIR" >> $GITHUB_ENV
-            exit 0
-          fi
-
-          echo "No index.html found in export output."
-          ls -la
-          ls -la out || true
-          find out -maxdepth 5 -type f | head -n 100 || true
-          exit 1
-
-      - name: Publish to gh-pages branch
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Upload static artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ${{ env.PUBLISH_DIR }}
-          publish_branch: gh-pages
-          force_orphan: true
+          path: ./out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
