@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const isGithubActions = process.env.GITHUB_ACTIONS === "true";
-const repoName = "AI_Fast_checking_app";
+const repository = process.env.GITHUB_REPOSITORY || "";
+const repoName = repository.includes("/") ? repository.split("/")[1] : "";
+const basePath = isGithubActions && repoName ? `/${repoName}` : "";
 
 const nextConfig = {
   reactStrictMode: true,
@@ -9,10 +11,10 @@ const nextConfig = {
   images: {
     unoptimized: true
   },
-  basePath: isGithubActions ? `/${repoName}` : "",
-  assetPrefix: isGithubActions ? `/${repoName}/` : "",
+  basePath,
+  assetPrefix: basePath ? `${basePath}/` : "",
   env: {
-    NEXT_PUBLIC_BASE_PATH: isGithubActions ? `/${repoName}` : ""
+    NEXT_PUBLIC_BASE_PATH: basePath
   }
 };
 
