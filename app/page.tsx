@@ -157,6 +157,8 @@ const INTERFACE_SAMPLES = [
 ];
 
 export default function Home() {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
   return (
     <main className="min-h-screen bg-slate-950 text-white antialiased">
       {/* ─── Hero Section ───────────────────────────────────────────────── */}
@@ -324,7 +326,7 @@ export default function Home() {
               >
                 <div className="aspect-[3/4] w-full bg-slate-800">
                   <img
-                    src={sample.image}
+                    src={`${basePath}${sample.image}`}
                     alt={sample.title}
                     className="h-full w-full object-cover"
                     loading="lazy"
