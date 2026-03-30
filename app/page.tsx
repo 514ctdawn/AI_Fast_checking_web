@@ -134,31 +134,29 @@ const INTERFACE_SAMPLES = [
     title: "Home Dashboard / 首頁儀表板",
     description:
       "Recent checks, trust score, and quick AI verify button designed for seniors.",
-    image: "/samples/interface-home.png"
+    image: "samples/interface-home.png"
   },
   {
     title: "Knowledge Library / 查核庫",
     description:
       "Topic-based browsing for verified claims in Health, Finance, and Social News.",
-    image: "/samples/interface-library.png"
+    image: "samples/interface-library.png"
   },
   {
     title: "Social Integration / 社群整合",
     description:
       "Cross-platform cards for Facebook, Threads, WhatsApp, and Douyin mention flows.",
-    image: "/samples/interface-social.png"
+    image: "samples/interface-social.png"
   },
   {
     title: "Interactive Demo / 互動教學",
     description:
       "Step-by-step mention example with AI response in Traditional Chinese.",
-    image: "/samples/interface-demo.png"
+    image: "samples/interface-demo.png"
   }
 ];
 
 export default function Home() {
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-
   return (
     <main className="min-h-screen bg-slate-950 text-white antialiased">
       {/* ─── Hero Section ───────────────────────────────────────────────── */}
@@ -326,7 +324,7 @@ export default function Home() {
               >
                 <div className="aspect-[3/4] w-full bg-slate-800">
                   <img
-                    src={`${basePath}${sample.image}`}
+                    src={sample.image}
                     alt={sample.title}
                     className="h-full w-full object-cover"
                     loading="lazy"
